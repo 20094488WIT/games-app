@@ -1,18 +1,20 @@
 # notes-app-console
-Console Notes App written in Kotlin.
+Games app written in kotlin based off of the Notes App V4
 
 ## Project Description
 
-The Notes App is a **Menu-Driven Console App** that allows the user to perform the following on a List of Notes:
+The Games App is a **Menu-Driven Console App** that allows the user to perform the following on games:
 
-1. Add a Note
-2. List a Note
-3. Update a Note
-4. Delete a Note
 
-The user can ***search*** for notes by their *title*. 
+1. Add a Game
+2. List all Games
+3. List all Games by genre
+4. Delete a Game
+5. Calculate Cost of all games that you own
 
-The notes can be persisted to files in the following format:
+The user can ***search*** for games by their *title*. 
+
+The games can be persisted to files in the following format:
 
 - XML
 - JSON
