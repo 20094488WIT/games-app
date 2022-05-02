@@ -28,9 +28,9 @@ class GameAPI(serializerType: Serializer){
 
         //if the Game exists, use the Game details passed as parameters to update the found Game in the ArrayList.
         if ((foundGame != null) && (game != null)) {
-            foundGame.GameTitle = game.GameTitle
-            foundGame.GamePriority = game.GamePriority
-            foundGame.GameCategory = game.GameCategory
+            foundGame.gameTitle = game.gameTitle
+            foundGame.gameCost = game.gameCost
+            foundGame.gameGenre = game.gameGenre
           return true
         }
 
@@ -41,8 +41,8 @@ class GameAPI(serializerType: Serializer){
     fun archiveGame(indexToArchive: Int): Boolean {
         if (isValidIndex(indexToArchive)) {
             val gameToArchive = games[indexToArchive]
-            if (!gameToArchive.isGameArchived) {
-                gameToArchive.isGameArchived = true
+            if (!gameToArchive.isGameOwned) {
+                gameToArchive.isGameOwned = true
                 return true
             }
         }
@@ -59,11 +59,11 @@ class GameAPI(serializerType: Serializer){
 
     fun listActiveGames(): String =
         if  (numberOfActiveGames() == 0)  "No active Games stored"
-        else formatListString(games.filter { Game -> !Game.isGameArchived})
+        else formatListString(games.filter { Game -> !Game.isGameOwned })
 
     fun listArchivedGames(): String =
         if  (numberOfArchivedGames() == 0) "No archived Games stored"
-        else formatListString(games.filter { Game -> Game.isGameArchived})
+        else formatListString(games.filter { Game -> Game.isGameOwned })
 
     fun listGamesBySelectedGenre(Genre: String): String {
         return if (games.isEmpty()) {
@@ -92,8 +92,8 @@ class GameAPI(serializerType: Serializer){
         return Games.size
     }
 
-    fun numberOfArchivedGames(): Int = Games.count { game: Game -> game.isGameArchived }
-    fun numberOfActiveGames(): Int   = Games.count { game: Game -> !game.isGameArchived }
+    fun numberOfArchivedGames(): Int = Games.count { game: Game -> game.isGameOwned }
+    fun numberOfActiveGames(): Int   = Games.count { game: Game -> !game.isGameOwned }
     fun numberOfGamesByPriority(priority: Int): Int = Games.count { game: Game -> game.GamePriority == priority }
 
     //----------------------------------------------
@@ -111,7 +111,7 @@ class GameAPI(serializerType: Serializer){
 
     fun searchByTitle (searchString : String) =
         formatListString(
-            Games.filter { Game -> Game.GameTitle.contains(searchString, ignoreCase = true) })
+            Games.filter { Game -> Game.gameTitle.contains(searchString, ignoreCase = true) })
 
     //----------------------------------------------
     //  HELPER METHODS

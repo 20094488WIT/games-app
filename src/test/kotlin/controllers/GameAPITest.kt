@@ -21,11 +21,11 @@ class GameAPITest {
 
     @BeforeEach
     fun setup(){
-        learnKotlin = Game("Learning Kotlin", 5, "College", false)
-        summerHoliday = Game("Summer Holiday to France", 1, "Holiday", false)
-        codeApp = Game("Code App", 4, "Work", true)
-        testApp = Game("Test App", 4, "Work", false)
-        swim = Game("Swim - Pool", 3, "Hobby", true)
+        learnKotlin = Game("Learning Kotlin",, 5, "College", false)
+        summerHoliday = Game("Summer Holiday to France",, 1, "Holiday", false)
+        codeApp = Game("Code App",, 4, "Work", true)
+        testApp = Game("Test App",, 4, "Work", false)
+        swim = Game("Swim - Pool",, 3, "Hobby", true)
 
         //adding 5 Note to the notes api
         populatedNotes!!.add(learnKotlin!!)
@@ -50,7 +50,7 @@ class GameAPITest {
     inner class AddNotes {
         @Test
         fun `adding a Note to a populated list adds to ArrayList`() {
-            val newGame = Game("Study Lambdas", 1, "College", false)
+            val newGame = Game("Study Lambdas",, 1, "College", false)
             assertEquals(5, populatedNotes!!.numberOfNotes())
             assertTrue(populatedNotes!!.add(newGame))
             assertEquals(6, populatedNotes!!.numberOfNotes())
@@ -59,7 +59,7 @@ class GameAPITest {
 
         @Test
         fun `adding a Note to an empty list adds to ArrayList`() {
-            val newGame = Game("Study Lambdas", 1, "College", false)
+            val newGame = Game("Study Lambdas",, 1, "College", false)
             assertEquals(0, emptyNotes!!.numberOfNotes())
             assertTrue(emptyNotes!!.add(newGame))
             assertEquals(1, emptyNotes!!.numberOfNotes())
@@ -71,9 +71,9 @@ class GameAPITest {
     inner class UpdateNotes {
         @Test
         fun `updating a note that does not exist returns false`(){
-            assertFalse(populatedNotes!!.updateNote(6, Game("Updating Note", 2, "Work", false)))
-            assertFalse(populatedNotes!!.updateNote(-1, Game("Updating Note", 2, "Work", false)))
-            assertFalse(emptyNotes!!.updateNote(0, Game("Updating Note", 2, "Work", false)))
+            assertFalse(populatedNotes!!.updateNote(6, Game("Updating Note",, 2, "Work", false)))
+            assertFalse(populatedNotes!!.updateNote(-1, Game("Updating Note",, 2, "Work", false)))
+            assertFalse(emptyNotes!!.updateNote(0, Game("Updating Note",, 2, "Work", false)))
         }
 
         @Test
@@ -85,7 +85,7 @@ class GameAPITest {
             assertEquals("Hobby", populatedNotes!!.findNote(4)!!.noteCategory)
 
             //update note 5 with new information and ensure contents updated successfully
-            assertTrue(populatedNotes!!.updateNote(4, Game("Updating Note", 2, "College", false)))
+            assertTrue(populatedNotes!!.updateNote(4, Game("Updating Note",, 2, "College", false)))
             assertEquals("Updating Note", populatedNotes!!.findNote(4)!!.noteTitle)
             assertEquals(2, populatedNotes!!.findNote(4)!!.notePriority)
            assertEquals("College", populatedNotes!!.findNote(4)!!.noteCategory)
