@@ -1,4 +1,4 @@
-# notes-app-console
+# Games-app-console
 Games app written in kotlin based off of the Notes App V4
 
 ## Project Description
