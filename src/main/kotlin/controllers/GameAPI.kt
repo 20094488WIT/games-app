@@ -24,9 +24,13 @@ class GameAPI(serializerType: Serializer){
 
     fun updateGame(
         indexToUpdate: String,
-        game: Game,
+        game: Int,
+        gameCost: Double,
+        gameGenre: String,
+        developerName: String,
+        isGameOwned: Boolean
 
-        ): Boolean {
+    ): Boolean {
         //find the Game object by the index number
         val foundGame = findGame(indexToUpdate)
 
@@ -35,23 +39,19 @@ class GameAPI(serializerType: Serializer){
             foundGame.gameTitle = game.gameTitle
             foundGame.gameCost = game.gameCost
             foundGame.gameGenre = game.gameGenre
+            foundGame.developerName = game.developerName
+
           return true
         }
 
         //if the Game was not found, return false, indicating that the update was not successful
         return false
+
+
     }
 
-    fun archiveGame(indexToArchive: Int): Boolean {
-        if (isValidIndex(indexToArchive)) {
-            val gameToArchive = games[indexToArchive]
-            if (!gameToArchive.isGameOwned) {
-                gameToArchive.isGameOwned = true
-                return true
-            }
-        }
-        return false
-    }
+
+
 
     //----------------------------------------------
     //  LISTING METHODS
@@ -95,9 +95,9 @@ class GameAPI(serializerType: Serializer){
     //----------------------------------------------
     //  SEARCHING METHODS
     //----------------------------------------------
-     fun findGame(index: Int): Game? {
-        return if (isValidListIndex(index, games)) {
-            games[index]
+     fun findGame(index: String): Game? {
+        return if (isValidListIndex(index.toInt(), games)) {
+            games[index.toInt()]
         } else null
     }
 
@@ -105,9 +105,9 @@ class GameAPI(serializerType: Serializer){
         return isValidListIndex(index, games);
     }
 
-    fun searchByTitle (searchString : String) =
+    fun searchByGenre (searchString : String) =
         formatListString(
-            games.filter { Game -> Game.gameTitle.contains(searchString, ignoreCase = true) })
+            games.filter { Game -> Game.gameGenre.contains(searchString, ignoreCase = true) })
 
     //----------------------------------------------
     //  HELPER METHODS
@@ -131,4 +131,5 @@ class GameAPI(serializerType: Serializer){
     }
 
 }
+
 

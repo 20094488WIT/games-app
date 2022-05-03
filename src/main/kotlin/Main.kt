@@ -104,8 +104,11 @@ fun updateGames() {
             val gameTitle = readNextLine("Enter a title for the game: ")
             val gameCost = readNextDouble("Enter the price of the game: ")
             val gameGenre = readNextLine("Enter a genre for the game: ")
+            val gameRating = readNextInt("Enter a rating for the game (1 - 10): ")
+            val developerName = readNextLine("Enter a genre for the game: ")
 
-            //pass the index of the note and the new note details to GameAPI for updating and check for success.
+
+            //pass the index of the game and the new game details to GameAPI for updating and check for success.
             if (gameAPI.updateGame(gameTitle, gameRating, gameCost, gameGenre, developerName, isGameOwned = false)) {
                 println("Update Successful")
             } else {
@@ -118,15 +121,15 @@ fun updateGames() {
 }
 
 fun deleteGame() {
-    //logger.info { "deleteNotes() function invoked" }
+
     listGames()
-    if (gameAPI.numberOfNotes() > 0) {
-        //only ask the user to choose the note to delete if notes exist
+    if (gameAPI.numberOfGames() > 0) {
+
         val indexToDelete = readNextInt("Enter the index of the note to delete: ")
-        //pass the index of the note to NoteAPI for deleting and check for success.
-        val noteToDelete = noteAPI.deleteNote(indexToDelete)
-        if (noteToDelete != null) {
-            println("Delete Successful! Deleted note: ${noteToDelete.noteTitle}")
+
+        val gameToDelete = gameAPI.deleteGame(indexToDelete)
+        if (gameToDelete != null) {
+            println("Delete Successful! Deleted game: ${gameToDelete.gameTitle}")
         } else {
             println("Delete NOT Successful")
         }
@@ -134,22 +137,12 @@ fun deleteGame() {
 }
 
 fun GameCost() {
-    listActiveNotes()
-    if (noteAPI.numberOfActiveNotes() > 0) {
-        //only ask the user to choose the note to archive if active notes exist
-        val indexToArchive = readNextInt("Enter the index of the note to archive: ")
-        //pass the index of the note to NoteAPI for archiving and check for success.
-        if (noteAPI.archiveNote(indexToArchive)) {
-            println("Archive Successful!")
-        } else {
-            println("Archive NOT Successful")
-        }
-    }
+
 }
 
 fun listGameGenre() {
-    val searchTitle = readNextLine("Enter the description to search by: ")
-    val searchResults = noteAPI.searchByTitle(searchTitle)
+    val searchGenre = readNextLine("Enter the genre to search by: ")
+    val searchResults = gameAPI.searchByGenre(searchGenre)
     if (searchResults.isEmpty()) {
         println("No notes found")
     } else {
