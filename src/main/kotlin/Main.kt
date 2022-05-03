@@ -5,7 +5,6 @@ import persistence.JSONSerializer
 import utils.ScannerInput.readNextDouble
 import utils.ScannerInput.readNextInt
 import utils.ScannerInput.readNextLine
-import java.awt.AWTEventMulticaster.add
 import java.io.File
 import java.lang.System.exit
 
@@ -23,8 +22,8 @@ fun runMenu() {
         val option = mainMenu()
         when (option) {
             1 -> addGame()
-            2 -> listGame()
-            3 -> updateGame()
+            2 -> listGames()
+            3 -> updateGames()
             4 -> deleteGame()
             5 -> listGameGenre()
             6 -> GameCost()
@@ -36,6 +35,8 @@ fun runMenu() {
         }
     } while (true)
 }
+
+
 
 fun mainMenu(): Int {
     return readNextInt(
@@ -69,7 +70,7 @@ fun addGame() {
     val gameGenre = readNextLine("Enter a genre: ")
     val developerName = readNextLine("Enter the developer name: ")
     var isGameOwned1 = readNextInt("Do you own this game? Type 1 for yes or 2 for no: ")
-    if (isGameOwned1 == 1){
+    if (isGameOwned1 == 1) {
         val isAdded = gameAPI.add(Game(gameTitle, gameRating, gameCost, gameGenre, developerName, isGameOwned = true))
 
         if (isAdded) {
@@ -77,17 +78,16 @@ fun addGame() {
         } else {
             println("Add Failed")
         }
-    }
-    else {
-    val isAdded = gameAPI.add(Game(gameTitle, gameRating, gameCost, gameGenre, developerName, isGameOwned = false))
-
-    if (isAdded) {
-        println("Added Successfully")
     } else {
-        println("Add Failed")
-    }
-    }
+        val isAdded = gameAPI.add(Game(gameTitle, gameRating, gameCost, gameGenre, developerName, isGameOwned = false))
 
+        if (isAdded) {
+            println("Added Successfully")
+        } else {
+            println("Add Failed")
+        }
+    }
+}
 
 fun listGames() {
     println(gameAPI.listAllGames())
@@ -95,33 +95,32 @@ fun listGames() {
 
 
 
-fun updateNote() {
-    //logger.info { "updateNotes() function invoked" }
+fun updateGames() {
     listGames()
-    if (gameAPI.numberOfNotes() > 0) {
-        //only ask the user to choose the note if notes exist
-        val indexToUpdate = readNextInt("Enter the index of the note to update: ")
-        if (noteAPI.isValidIndex(indexToUpdate)) {
-            val noteTitle = readNextLine("Enter a title for the note: ")
-            val notePriority = readNextInt("Enter a priority (1-low, 2, 3, 4, 5-high): ")
-            val noteCategory = readNextLine("Enter a category for the note: ")
+    if (gameAPI.numberOfGames() > 0) {
+        //only ask the user to choose the game if game exists
+        val indexToUpdate = readNextInt("Enter the index of the game to update: ")
+        val any = if (gameAPI.isValidIndex(indexToUpdate)) {
+            val gameTitle = readNextLine("Enter a title for the game: ")
+            val gameCost = readNextDouble("Enter the price of the game: ")
+            val gameGenre = readNextLine("Enter a genre for the game: ")
 
-            //pass the index of the note and the new note details to NoteAPI for updating and check for success.
-            if (noteAPI.updateNote(indexToUpdate, Game(noteTitle,, notePriority, noteCategory, false))) {
+            //pass the index of the note and the new note details to GameAPI for updating and check for success.
+            if (gameAPI.updateGame(gameTitle, gameRating, gameCost, gameGenre, developerName, isGameOwned = false)) {
                 println("Update Successful")
             } else {
                 println("Update Failed")
             }
         } else {
-            println("There are no notes for this index number")
+            println("There are no games for this index number")
         }
     }
 }
 
-fun deleteNote() {
+fun deleteGame() {
     //logger.info { "deleteNotes() function invoked" }
-    listNotes()
-    if (noteAPI.numberOfNotes() > 0) {
+    listGames()
+    if (gameAPI.numberOfNotes() > 0) {
         //only ask the user to choose the note to delete if notes exist
         val indexToDelete = readNextInt("Enter the index of the note to delete: ")
         //pass the index of the note to NoteAPI for deleting and check for success.
@@ -134,7 +133,7 @@ fun deleteNote() {
     }
 }
 
-fun archiveNote() {
+fun GameCost() {
     listActiveNotes()
     if (noteAPI.numberOfActiveNotes() > 0) {
         //only ask the user to choose the note to archive if active notes exist
@@ -148,7 +147,7 @@ fun archiveNote() {
     }
 }
 
-fun searchNotes() {
+fun listGameGenre() {
     val searchTitle = readNextLine("Enter the description to search by: ")
     val searchResults = noteAPI.searchByTitle(searchTitle)
     if (searchResults.isEmpty()) {
@@ -158,12 +157,17 @@ fun searchNotes() {
     }
 }
 
+
+fun GameSuggestion() {
+    TODO("Not yet implemented")
+}
+
 //------------------------------------
 // PERSISTENCE METHODS
 // ------------------------------------
 fun save() {
     try {
-        noteAPI.store()
+        gameAPI.store()
     } catch (e: Exception) {
         System.err.println("Error writing to file: $e")
     }
@@ -171,7 +175,7 @@ fun save() {
 
 fun load() {
     try {
-        noteAPI.load()
+        gameAPI.load()
     } catch (e: Exception) {
         System.err.println("Error reading from file: $e")
     }

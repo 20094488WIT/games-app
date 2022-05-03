@@ -22,7 +22,11 @@ class GameAPI(serializerType: Serializer){
         } else null
     }
 
-    fun updateGame(indexToUpdate: Int, game: Game?): Boolean {
+    fun updateGame(
+        indexToUpdate: String,
+        game: Game,
+
+        ): Boolean {
         //find the Game object by the index number
         val foundGame = findGame(indexToUpdate)
 
@@ -57,13 +61,6 @@ class GameAPI(serializerType: Serializer){
         if  (games.isEmpty()) "No Games stored"
         else formatListString(games)
 
-    fun listActiveGames(): String =
-        if  (numberOfActiveGames() == 0)  "No active Games stored"
-        else formatListString(games.filter { Game -> !Game.isGameOwned })
-
-    fun listArchivedGames(): String =
-        if  (numberOfArchivedGames() == 0) "No archived Games stored"
-        else formatListString(games.filter { Game -> Game.isGameOwned })
 
     fun listGamesBySelectedGenre(Genre: String): String {
         return if (games.isEmpty()) {
@@ -80,7 +77,7 @@ class GameAPI(serializerType: Serializer){
             if (listOfGames.equals("")) {
                 "No Games with genre: $Genre"
             } else {
-                "${numberOfGamesByPriority(priority)} Games with priority $priority: $listOfGames"
+                "No Games with genre: $Genre"
             }
         }
     }
@@ -89,29 +86,28 @@ class GameAPI(serializerType: Serializer){
     //  COUNTING METHODS
     //----------------------------------------------
     fun numberOfGames(): Int {
-        return Games.size
+        return games.size
     }
 
-    fun numberOfArchivedGames(): Int = Games.count { game: Game -> game.isGameOwned }
-    fun numberOfActiveGames(): Int   = Games.count { game: Game -> !game.isGameOwned }
-    fun numberOfGamesByPriority(priority: Int): Int = Games.count { game: Game -> game.GamePriority == priority }
+    fun numberOfOwnedGames(): Int = games.count { game: Game -> game.isGameOwned }
+
 
     //----------------------------------------------
     //  SEARCHING METHODS
     //----------------------------------------------
      fun findGame(index: Int): Game? {
-        return if (isValidListIndex(index, Games)) {
-            Games[index]
+        return if (isValidListIndex(index, games)) {
+            games[index]
         } else null
     }
 
     fun isValidIndex(index: Int) :Boolean {
-        return isValidListIndex(index, Games);
+        return isValidListIndex(index, games);
     }
 
     fun searchByTitle (searchString : String) =
         formatListString(
-            Games.filter { Game -> Game.gameTitle.contains(searchString, ignoreCase = true) })
+            games.filter { Game -> Game.gameTitle.contains(searchString, ignoreCase = true) })
 
     //----------------------------------------------
     //  HELPER METHODS
@@ -119,19 +115,19 @@ class GameAPI(serializerType: Serializer){
     private fun formatListString(GamesToFormat : List<Game>) :String =
         GamesToFormat
             .joinToString (separator = "\n") { Game ->
-                Games.indexOf(Game).toString() + ": " + Game.toString() }
+                games.indexOf(Game).toString() + ": " + Game.toString() }
 
     //----------------------------------------------
     //  PERSISTENCE METHODS
     //----------------------------------------------
     @Throws(Exception::class)
     fun load() {
-        Games = serializer.read() as ArrayList<Game>
+        games = serializer.read() as ArrayList<Game>
     }
 
     @Throws(Exception::class)
     fun store() {
-        serializer.write(Games)
+        serializer.write(games)
     }
 
 }
